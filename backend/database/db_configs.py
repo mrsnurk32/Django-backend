@@ -22,3 +22,10 @@ POSTGRESQL_DB_CONFIG = {
         'PORT': os.getenv("PG_PORT", ""),
     }
 }
+
+DEBUG = bool(os.getenv("DEBUG", True))
+
+DB_CONFIG = POSTGRESQL_DB_CONFIG
+
+if DEBUG:
+    DB_CONFIG = SQLITE_DB_CONFIG
