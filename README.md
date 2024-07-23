@@ -1,2 +1,13 @@
 # Django-backend
-Template backend project
+
+
+## Getting Started
+----
+
+```
+docker-compose up --build
+```
+
+
+
+
