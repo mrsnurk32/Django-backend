@@ -13,10 +13,8 @@ import rest_api_v1.responses as response_description
 import polls.serializers as serializers
 import polls.models as poll_models
 
-
-# TO DO 
-# Create Async poll request
-# Create tests
+#Tasks
+import polls.tasks as poll_tasks
 
 class CreatePoll(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -37,6 +35,27 @@ class CreatePoll(APIView):
 
         serializer.save()        
         return response_description.serialized_response_201()
+    
+
+class CreateAsyncPoll(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.PollSerializer
+
+    @swagger_auto_schema(
+        request_body=serializers.PollSerializer(),
+        responses={
+            201: response_description.response_200,
+            400: response_description.response_400,
+            401: response_description.response_401,
+            500: response_description.response_500,
+        })
+    def post(self, request) -> Response:
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return response_description.serialized_response_400(errors=serializer._errors)
+
+        poll_tasks.create_poll.delay(serializer.data)
+        return response_description.serialized_response_200()
     
 
 class ReadPolls(APIView):
