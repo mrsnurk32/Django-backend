@@ -29,7 +29,7 @@ def validate_response(func) -> Response:
 @validate_response
 def serialized_response_200() -> dict:
     data=dict(detail=SUCCESS_200_DESCRIPTION)
-    serializer = response_serializers.SuccessfulResponseSerializer(detail=data)
+    serializer = response_serializers.SuccessfulResponseSerializer(data=data)
     return status.HTTP_200_OK, serializer
 
 
